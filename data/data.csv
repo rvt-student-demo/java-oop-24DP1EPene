@@ -1,5 +1,4 @@
-name, age
-Jack, 22
-Peter, 19
-Peter, 19
-Peter, 19
+OrderID,Customer,Product,Quantity,Price
+1,Anna,Basketball,2,25.50
+2,Jānis,Shoes,1,59.99
+3,Liga,Jersey,3,19.99
