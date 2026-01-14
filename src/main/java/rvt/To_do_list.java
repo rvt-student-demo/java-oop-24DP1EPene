@@ -16,30 +16,53 @@ public class To_do_list {
     }
 
     public To_do_list() {
-        this.file = new File("data/data.csv");
+        this("data/todo.csv");
     }
 
-    public void add(String task) {
+    public void add(String task, String status, String date) {
         try {
             FileWriter writer = new FileWriter(file, true);
-            writer.write(task);
+
+            writer.write(task + "," + status + "," + date + "\n");
+            writer.close();
         }
         catch (IOException e) {
-            System.out.println("Got an error: " + e);
+            System.out.println("Got an error while adding a task: " + e);
         }
     }
 
     public void print() {
-        Scanner scanner;
         try {
-            scanner = new Scanner(file);
+            Scanner scanner = new Scanner(file);
+
             while (scanner.hasNextLine()) {
-                System.out.printf(scanner.nextLine());
+                System.out.println(scanner.nextLine());
             }
-        } catch (FileNotFoundException e) {}
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
     }
 
-    public void remove(int i) {
-        tasks.remove(i);
+    public void remove(int index) {
+        try {
+            Scanner scanner = new Scanner(file);
+
+            List<String> lines = new ArrayList<String>();
+            while (scanner.hasNextLine()) {
+                lines.add(scanner.nextLine());
+            }
+            scanner.close();
+
+            FileWriter writer = new FileWriter(file);
+            for (int i = 0; i < lines.size(); i++) {
+                if (i != index) {
+                    writer.write(lines.get(i) + "\n");
+                }
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Got an error while removing a task: " + e);
+        }
     }
 }
