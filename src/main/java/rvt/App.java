@@ -1,21 +1,36 @@
 package rvt;
 
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) {
         To_do_list my_list = new To_do_list();
-        my_list.add("Buy groceries", "Pending", "2025-01-20");
-        my_list.add("Study Java", "In Progress", "2025-01-22");
-        my_list.add("Call dentist", "Pending", "2025-01-25");
-        
-        // Display all tasks
-        my_list.print();
-        
-        // Remove a task at index 1 (Study Java)
-        my_list.remove(1);
+        Scanner scanner = new Scanner(System.in);
+        String command = "";
 
-        my_list.add("Go for a walk", "Pending", "2025-01-21");
-        
-        // Display all tasks again
-        my_list.print();
+        while (!command.equals("stop")) {
+            System.out.print("Command: ");
+            command = scanner.nextLine();
+            switch (command) {
+                case "add":
+                    System.out.print("Task: ");
+                    String task = scanner.nextLine();
+                    if (task.length() >= 3 && task.matches("[A-Za-z0-9\\s]")) {
+                        my_list.add(task);
+                    }
+                    break;
+                case "list":
+                    my_list.print();
+                    break;
+                case "completed", "remove":
+                    System.out.print("Enter the id of the task: ");
+                    my_list.remove(Integer.valueOf(scanner.nextLine()));
+                    break;
+                case "help":
+                    System.out.println("All available commands: \n\tAdd\n\tlist\n\tcompleted\n\tstop");
+            }
+        }
+        scanner.close();
+        System.out.println("Successfully left!");
     }
 }
