@@ -61,9 +61,9 @@ public class App {
                     System.out.println("Commands: register, list or print, remove, exit, clear, edit");
                     break;
                 case "remove":
-                    System.out.print("enter the id of the student to remove: ");
+                    System.out.print("enter the personal code of the student to remove: ");
                     if (!infoBank.remove(scanner.nextLine())) {
-                        System.out.println("No such id!");
+                        System.out.println("No such personal code!");
                     }
                     break;
                 case "print":
@@ -142,15 +142,24 @@ public class App {
                     }
                     break;
                 case "edit":
-                    // Update, so that you can leave the fields empty and check if such an id exists
-                    System.out.print("Enter the students id: ");
-                    String id = scanner.nextLine();
-                    if (!infoBank.idList.contains(id)) {
-                        System.out.println("No such id!");
+                    // Update, so that you can leave the fields empty and check if such a personal code exists
+                    System.out.print("Enter the student's personal code: ");
+                    personalCode = scanner.nextLine();
+                    if (!infoBank.personalCodes.contains(personalCode)) {
+                        System.out.println("No such personal code!");
                         break;
                     }
-                    List<String> student = new ArrayList<String>();
-                    student.add(id);
+                    
+                    // Find the student's current data to preserve UUID and other fields
+                    List<String> currentStudent = null;
+                    for (List<String> student : infoBank.data) {
+                        if (student.get(4).equals(personalCode)) {
+                            currentStudent = new ArrayList<>(student);
+                            break;
+                        }
+                    }
+                    
+                    List<String> student = new ArrayList<>(currentStudent);
                     System.out.print("Enter new name: ");
                     String new_name = scanner.nextLine();
                     if (new_name.length() > 0) {
@@ -159,8 +168,8 @@ public class App {
                             System.out.print("Enter new name: ");
                             new_name = scanner.nextLine();
                         }
+                        student.set(1, new_name);
                     }
-                    student.add(new_name);
 
                     System.out.print("Enter new surname: ");
                     String new_surname = scanner.nextLine();
@@ -170,8 +179,8 @@ public class App {
                             System.out.print("Enter new surname: ");
                             new_surname = scanner.nextLine();
                         }
+                        student.set(2, new_surname);
                     }
-                    student.add(new_surname);
 
                     System.out.print("Enter new email: ");
                     String new_email = scanner.nextLine();
@@ -181,20 +190,20 @@ public class App {
                             System.out.print("Enter new email: ");
                             new_email = scanner.nextLine();
                         }
+                        student.set(3, new_email);
                     }
-                    student.add(new_email);
 
                     System.out.print("Enter new personal code: ");
                     String new_personal_code = scanner.nextLine();
                     if (new_personal_code.length() > 0) {
-                        while (!new_personal_code.matches("^\\d{7}-\\d{5}$")) {
-                            System.out.println("Invalid personal code format!");
+                        while (!new_personal_code.matches("^\\d{7}-\\d{5}$") || (infoBank.personalCodes.contains(new_personal_code) && !new_personal_code.equals(personalCode))) {
+                            System.out.println("Invalid personal code format or such a code already exists!");
                             System.out.print("Enter new personal code: ");
                             new_personal_code = scanner.nextLine();
                         }
+                        student.set(4, new_personal_code);
                     }
-                    student.add(new_personal_code);
-                    infoBank.update(id, student);
+                    infoBank.update(personalCode, student);
                     break;
                 default:
                     if (!leaveCommands.contains(command)) {

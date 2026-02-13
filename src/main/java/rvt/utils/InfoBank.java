@@ -17,7 +17,6 @@ public class InfoBank {
 
     public List<List<String>> data = new ArrayList<>();
     public List<String> personalCodes = new ArrayList<String>();
-    public List<String> idList = new ArrayList<String>();
 
     public InfoBank(String path) {
         this.file = new File(path);
@@ -30,7 +29,6 @@ public class InfoBank {
             List<String> user = Arrays.asList(scanner.nextLine().split(","));
             data.add(user);
             personalCodes.add(user.get(4));
-            idList.add(user.get(0));
         }
         scanner.close();
     }
@@ -42,7 +40,7 @@ public class InfoBank {
     public void add(String name, String surname, String email, String personalCode) {
         try { 
             FileWriter writer = new FileWriter(file, true);
-            String line = String.format("%s, %s, %s, %s, %s, %s", java.util.UUID.randomUUID().toString(), name, surname, email, personalCode, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            String line = String.format("%s,%s,%s,%s,%s,%s", java.util.UUID.randomUUID().toString(), name, surname, email, personalCode, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
             writer.write(line + "\n");
             writer.close();
@@ -53,10 +51,10 @@ public class InfoBank {
         }
     }
 
-    public boolean remove(String id) {
+    public boolean remove(String personalCode) {
         boolean removed = false;
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).get(0).equals(id)) {
+            if (data.get(i).get(4).equals(personalCode)) {
                 data.remove(i);
                 removed = true;
                 break;
@@ -65,9 +63,9 @@ public class InfoBank {
         return removed;
     }
 
-    public void update(String id, List<String> updatedData) {
+    public void update(String personalCode, List<String> updatedData) {
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).get(0).equals(id)) {
+            if (data.get(i).get(4).equals(personalCode)) {
                 data.set(i, updatedData);
             }
         }
