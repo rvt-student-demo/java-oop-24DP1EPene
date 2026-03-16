@@ -1,13 +1,18 @@
 package rvt;
 
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) {
-        IOU mattsIOU = new IOU();
-
-        mattsIOU.setSum("Arthur", 51.5);
-        mattsIOU.setSum("Michael", 30.0);
-
-        System.out.println(mattsIOU.howMuchDoIOweTo("Arthur"));
-        System.out.println(mattsIOU.howMuchDoIOweTo("Michael"));
+        Warehouse warehouse = new Warehouse();
+        warehouse.addProduct("coffee", 5, 10);
+        warehouse.addProduct("milk", 3, 20);
+        warehouse.addProduct("cream", 2, 55);
+        warehouse.addProduct("bread", 7, 8);
+    
+        Scanner scanner = new Scanner(System.in);
+    
+        Store store = new Store(warehouse, scanner);
+        store.shop("John");
     }
 }
